@@ -1,0 +1,37 @@
+{
+    "traffic_timings": [
+        {
+            "traffic_id": 1,
+            "time": 15.0
+        },
+        {
+            "traffic_id": 2,
+            "time": 14
+        },
+        {
+            "traffic_id": 3,
+            "time": 13.0
+        },
+        {
+            "traffic_id": 4,
+            "time": 16.0
+        },
+        {
+            "traffic_id": 1,
+            "time": 15.0
+        },
+        {
+            "traffic_id": 2,
+            "time": 14
+        },
+        {
+            "traffic_id": 3,
+            "time": 16.0
+        },
+        {
+            "traffic_id": 4,
+            "time": 13.0
+        }
+    ],
+    "violation_check": "Violation: 9 vehicles present while light is red!"
+}

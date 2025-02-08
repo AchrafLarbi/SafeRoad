@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .intersection {
+            position: relative;
+            width: 600px;
+            height: 600px;
+        }
+
+        .road {
+            position: absolute;
+            background-color: #d3d3d3;
+        }
+
+        .road.vertical {
+            width: 100px;
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .road.horizontal {
+            width: 100%;
+            height: 100px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .center-circle {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-color: #4a90e2;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .traffic-lane {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100px;
+        }
+
+        .traffic-lane.top {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .traffic-lane.right {
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+        }
+
+        .traffic-lane.bottom {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .traffic-lane.left {
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+        }
+
+        .traffic-light {
+            width: 30px;
+            height: 60px;
+            background-color: #fff;
+            border: 2px solid #000;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .traffic-light::before {
+            content: '';
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin: 3px auto;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .cars-count {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .traffic-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="intersection">
+        <div class="road vertical"></div>
+        <div class="road horizontal"></div>
+        <div class="center-circle"></div>
+
+        <div class="traffic-lane top">
+            <div class="traffic-light"></div>
+            <div class="cars-count">0</div>
+            <img src="traffic-top.jpg" alt="Top Traffic" class="traffic-image">
+        </div>
+
+        <div class="traffic-lane right">
+            <div class="traffic-light"></div>
+            <div class="cars-count">0</div>
+            <img src="traffic-right.jpg" alt="Right Traffic" class="traffic-image">
+        </div>
+
+        <div class="traffic-lane bottom">
+            <div class="traffic-light"></div>
+            <div class="cars-count">0</div>
+            <img src="traffic-bottom.jpg" alt="Bottom Traffic" class="traffic-image">
+        </div>
+
+        <div class="traffic-lane left">
+            <div class="traffic-light"></div>
+            <div class="cars-count">0</div>
+            <img src="traffic-left.jpg" alt="Left Traffic" class="traffic-image">
+        </div>
+    </div>
+</body>
+</html>

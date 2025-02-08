@@ -1,0 +1,392 @@
+[
+    {
+        "traffic_id": 1,
+        "rows": [
+            {
+                "row_id": 1,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 2,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 3,
+                "cars": 1,
+                "trucks": 0
+            },
+            {
+                "row_id": 4,
+                "cars": 0,
+                "trucks": 0
+            }
+        ],
+        "total": {
+            "cars": 13,
+            "trucks": 0
+        },
+        "timestamp": "2024-12-16 07:26:45"
+    },
+    {
+        "traffic_id": 2,
+        "rows": [
+            {
+                "row_id": 1,
+                "cars": 3,
+                "trucks": 2
+            },
+            {
+                "row_id": 2,
+                "cars": 5,
+                "trucks": 0
+            },
+            {
+                "row_id": 3,
+                "cars": 0,
+                "trucks": 0
+            },
+            {
+                "row_id": 4,
+                "cars": 0,
+                "trucks": 0
+            }
+        ],
+        "total": {
+            "cars": 8,
+            "trucks": 2
+        },
+        "timestamp": "2024-12-16 07:26:54"
+    },
+    {
+        "traffic_id": 3,
+        "rows": [
+            {
+                "row_id": 1,
+                "cars": 1,
+                "trucks": 0
+            },
+            {
+                "row_id": 2,
+                "cars": 7,
+                "trucks": 0
+            },
+            {
+                "row_id": 3,
+                "cars": 4,
+                "trucks": 0
+            },
+            {
+                "row_id": 4,
+                "cars": 2,
+                "trucks": 0
+            }
+        ],
+        "total": {
+            "cars": 14,
+            "trucks": 0
+        },
+        "timestamp": "2024-12-16 07:27:08"
+    },
+    {
+        "traffic_id": 4,
+        "rows": [
+            {
+                "row_id": 1,
+                "cars": 0,
+                "trucks": 0
+            },
+            {
+                "row_id": 2,
+                "cars": 1,
+                "trucks": 0
+            },
+            {
+                "row_id": 3,
+                "cars": 10,
+                "trucks": 0
+            },
+            {
+                "row_id": 4,
+                "cars": 0,
+                "trucks": 0
+            }
+        ],
+        "total": {
+            "cars": 11,
+            "trucks": 0
+        },
+        "timestamp": "2024-12-16 07:27:22"
+    },
+    {
+        "traffic_id": 1,
+        "rows": [
+            {
+                "row_id": 1,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 2,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 3,
+                "cars": 1,
+                "trucks": 0
+            },
+            {
+                "row_id": 4,
+                "cars": 0,
+                "trucks": 0
+            }
+        ],
+        "total": {
+            "cars": 13,
+            "trucks": 0
+        },
+        "timestamp": "2024-12-22 17:09:43"
+    },
+    {
+        "traffic_id": 1,
+        "rows": [
+            {
+                "row_id": 1,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 2,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 3,
+                "cars": 1,
+                "trucks": 0
+            },
+            {
+                "row_id": 4,
+                "cars": 0,
+                "trucks": 0
+            }
+        ],
+        "total": {
+            "cars": 13,
+            "trucks": 0
+        },
+        "timestamp": "2024-12-22 17:14:43"
+    },
+    {
+        "traffic_id": 1,
+        "rows": [
+            {
+                "row_id": 1,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 2,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 3,
+                "cars": 1,
+                "trucks": 0
+            },
+            {
+                "row_id": 4,
+                "cars": 0,
+                "trucks": 0
+            }
+        ],
+        "total": {
+            "cars": 13,
+            "trucks": 0
+        },
+        "timestamp": "2024-12-22 17:20:14"
+    },
+    {
+        "traffic_id": 1,
+        "rows": [
+            {
+                "row_id": 1,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 2,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 3,
+                "cars": 1,
+                "trucks": 0
+            },
+            {
+                "row_id": 4,
+                "cars": 0,
+                "trucks": 0
+            }
+        ],
+        "total": {
+            "cars": 13,
+            "trucks": 0
+        },
+        "timestamp": "2024-12-22 17:23:33"
+    },
+    {
+        "traffic_id": 1,
+        "rows": [
+            {
+                "row_id": 1,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 2,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 3,
+                "cars": 1,
+                "trucks": 0
+            },
+            {
+                "row_id": 4,
+                "cars": 0,
+                "trucks": 0
+            }
+        ],
+        "total": {
+            "cars": 13,
+            "trucks": 0
+        },
+        "timestamp": "2024-12-22 17:26:45"
+    },
+    {
+        "traffic_id": 1,
+        "rows": [
+            {
+                "row_id": 1,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 2,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 3,
+                "cars": 1,
+                "trucks": 0
+            },
+            {
+                "row_id": 4,
+                "cars": 0,
+                "trucks": 0
+            }
+        ],
+        "total": {
+            "cars": 13,
+            "trucks": 0
+        },
+        "timestamp": "2024-12-22 17:30:20"
+    },
+    {
+        "traffic_id": 1,
+        "rows": [
+            {
+                "row_id": 1,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 2,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 3,
+                "cars": 1,
+                "trucks": 0
+            },
+            {
+                "row_id": 4,
+                "cars": 0,
+                "trucks": 0
+            }
+        ],
+        "total": {
+            "cars": 13,
+            "trucks": 0
+        },
+        "timestamp": "2024-12-22 17:32:37"
+    },
+    {
+        "traffic_id": 1,
+        "rows": [
+            {
+                "row_id": 1,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 2,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 3,
+                "cars": 1,
+                "trucks": 0
+            },
+            {
+                "row_id": 4,
+                "cars": 0,
+                "trucks": 0
+            }
+        ],
+        "total": {
+            "cars": 13,
+            "trucks": 0
+        },
+        "timestamp": "2024-12-22 17:37:56"
+    },
+    {
+        "traffic_id": 1,
+        "rows": [
+            {
+                "row_id": 1,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 2,
+                "cars": 6,
+                "trucks": 0
+            },
+            {
+                "row_id": 3,
+                "cars": 1,
+                "trucks": 0
+            },
+            {
+                "row_id": 4,
+                "cars": 0,
+                "trucks": 0
+            }
+        ],
+        "total": {
+            "cars": 13,
+            "trucks": 0
+        },
+        "timestamp": "2024-12-22 17:41:09"
+    }
+]

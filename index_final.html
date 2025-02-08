@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Light Simulation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mqtt/dist/mqtt.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0f7fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            color: #00796b;
+        }
+
+        .road {
+            position: relative;
+            width: 800px; /* Increased width */
+            height: 800px; /* Increased height */
+            background-color: #424242;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .road::before, .road::after {
+            content: '';
+            position: absolute;
+            background-color: #fff;
+        }
+
+        .road::before {
+            width: 100%;
+            height: 20px; /* Increased height */
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .road::after {
+            height: 100%;
+            width: 20px; /* Increased width */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .traffic-light-container {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 60px; /* Reduced width */
+            height: 380px; /* Reduced height */
+            background-color: #212121;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            margin: 20px; /* Increased margin */
+        }
+
+        .traffic-light-container[data-id="1"] {
+            top: 1px; /* Increased top position */
+            left: 50%;
+            transform: translateX(-140%);
+        }
+
+        .traffic-light-container[data-id="2"] {
+            top: 50%;
+            right: 40px; /* Increased right position */
+            transform: translateY(-50%);
+        }
+
+        .traffic-light-container[data-id="3"] {
+            bottom: 1px; /* Increased bottom position */
+            left: 50%;
+            transform: translateX(-10%);
+        }
+
+        .traffic-light-container[data-id="4"] {
+            top: 50%;
+            left: 40px; /* Increased left position */
+            transform: translateY(-50%);
+        }
+
+        .light {
+            width: 40px; /* Reduced width */
+            height: 40px; /* Reduced height */
+            background-color: #555;
+            border-radius: 50%;
+            margin: 10px 0;
+            transition: background-color 0.5s, box-shadow 0.5s;
+        }
+
+        .light.red.active { 
+            background-color: red; 
+            box-shadow: 0 0 20px red;
+        }
+        .light.yellow.active { 
+            background-color: yellow; 
+            box-shadow: 0 0 20px yellow;
+        }
+        .light.green.active { 
+            background-color: green; 
+            box-shadow: 0 0 20px green;
+        }
+
+        .info-display {
+            margin-top: 10px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .upload-container {
+            margin: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .image-preview {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 10px;
+            object-fit: cover;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #004d40;
+        }
+
+        .vehicle-count {
+            font-size: 16px;
+            margin-top: 5px;
+            color: #00796b;
+        }
+
+        .timer {
+            font-size: 14px;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Traffic Light Simulation</h1>
+    <div class="road" id="trafficLights"></div>
+
+    <script>
+        // MQTT Configuration
+        const client = mqtt.connect('wss://broker.emqx.io:8084/mqtt', {
+            clientId: 'web-client-' + Math.random().toString(16).substr(2, 8),
+            clean: true,
+            connectTimeout: 10000,
+            keepalive: 60,
+            reconnectPeriod: 1000,
+        });
+    
+        // Traffic lights state storage
+        let trafficLights = {};
+        let trafficLightTimers = {};
+        let currentLightIndex = 0;  // Keeps track of which light is currently active
+    
+        // Function to create a traffic light
+        function createTrafficLight(id) {
+            const container = document.createElement('div');
+            container.className = 'traffic-light-container';
+            container.setAttribute('data-id', id);
+
+            const uploadContainer = document.createElement('div');
+            uploadContainer.className = 'upload-container';
+
+            const imagePreview = document.createElement('img');
+            imagePreview.className = 'image-preview';
+            imagePreview.src = "https://via.placeholder.com/120"; // Placeholder image
+
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.style.display = 'none';
+
+            const uploadButton = document.createElement('button');
+            uploadButton.textContent = 'Upload Vehicle Image';
+
+            uploadButton.addEventListener('click', () => fileInput.click());
+
+            fileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const imageData = e.target.result.split(',')[1]; // Base64 image data
+                        imagePreview.src = e.target.result; // Display uploaded image
+                        client.publish(`traffic/light/image${id}`, JSON.stringify({ image: imageData }));
+                        alert('Image uploaded and sent for processing.');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Please select an image file to upload.');
+                }
+            });
+
+            uploadContainer.appendChild(imagePreview);
+            uploadContainer.appendChild(uploadButton);
+            uploadContainer.appendChild(fileInput);
+
+            const light = document.createElement('div');
+            light.className = 'traffic-light';
+
+            // Modify active light based on the traffic light ID
+            const redClass = id === 1 ? 'red' : 'red active';
+            const yellowClass = id === 1 ? 'yellow' : 'yellow';
+            const greenClass = id === 1 ? 'green active' : 'green';
+
+            light.innerHTML = `
+                <div class="light ${redClass}"></div>
+                <div class="light ${yellowClass}"></div>
+                <div class="light ${greenClass}"></div>
+            `;
+
+            const vehicleCount = document.createElement('div');
+            vehicleCount.className = 'vehicle-count';
+            vehicleCount.innerHTML = `Cars: <span id="cars${id}">${0}</span>, Trucks: <span id="trucks${id}">${0}</span>;`
+
+            const timerDisplay = document.createElement('div');
+            timerDisplay.className = 'timer';
+            timerDisplay.innerHTML = `Time Left: <span id="timer${id}">30</span>;`
+
+            trafficLights[id] = {
+                state: id === 1 ? 'green' : 'red', // Default to green for the first light, red for others
+                element: container,
+                time: id === 1 ? 30 : 20,  // Set initial time for green light to 30 seconds, others to 20 seconds
+                currentTimer: id === 1 ? 30 : 20  // Use this variable for countdown, set green to 30 seconds
+            };
+
+            container.appendChild(uploadContainer);
+            container.appendChild(light);
+            container.appendChild(vehicleCount);
+            container.appendChild(timerDisplay);
+            document.getElementById('trafficLights').appendChild(container);
+
+            // Initialize state
+            updateTrafficLightDisplay(id); // Ensure the state is set on creation
+        }
+
+        // Initialize traffic lights
+        for (let i = 1; i <= 4; i++) {
+            createTrafficLight(i);
+        }
+
+        // MQTT Connection and subscriptions
+        client.on('connect', () => {
+            console.log('Connected to MQTT broker');
+            for (let i = 1; i <= 4; i++) {
+                client.subscribe(`traffic/vehicle_count${i}`, (err) => {
+                    if (!err) {
+                        console.log(`Subscribed to topic: traffic/vehicle_count${i}`);
+                    }
+                });
+            }
+            client.subscribe(`traffic/light/status`, (err) => {
+                if (!err) {
+                    console.log('Subscribed to topic: traffic/light/status');
+                }
+            });
+            // Listen for other traffic light control messages
+            client.subscribe('traffic/light/color', (err) => {
+                if (!err) {
+                    console.log('Subscribed to topic: traffic/light/color');
+                }
+            });
+        });
+
+        // Handle incoming MQTT messages and update vehicle counts and traffic light status
+        client.on('message', (topic, message) => {
+            const data = JSON.parse(message.toString());
+            console.log(`Received message on topic ${topic}: ${message.toString()}`);
+
+            // Handle traffic/light/status messages
+            if (topic === 'traffic/light/status') {
+                const { traffic_id, time, state } = data;
+
+                // Ensure the traffic light exists, or create it
+                if (!trafficLights[traffic_id]) {
+                    createTrafficLight(traffic_id);
+                }
+
+                const trafficLight = trafficLights[traffic_id];
+
+                // Set initial time from pub message
+                trafficLight.time = time;
+                trafficLight.currentTimer = time;  // Reset current timer to match the pub time
+                trafficLight.state = traffic_id === 1 ? 'green' : 'red'; // Default to green for the first light, red for others
+
+                // Start the timer only if it hasn't already started
+                if (trafficLightTimers[traffic_id]) {
+                    clearInterval(trafficLightTimers[traffic_id]); // Clear any existing timer
+                }
+                trafficLightTimers[traffic_id] = setInterval(() => updateTrafficLightDisplay(traffic_id), 1000);
+
+                updateTrafficLightDisplay(traffic_id); // Update display immediately
+
+                console.log(`Traffic Light ${traffic_id} updated: Time = ${time}, State = ${trafficLight.state}`);
+            }
+
+            // Handle traffic/vehicle_countX topics
+            if (topic.startsWith('traffic/vehicle_count')) {
+                const trafficId = topic.replace('traffic/vehicle_count', '');
+                const cars = data.total.cars || 0;
+                const trucks = data.total.trucks || 0;
+
+                // Ensure the traffic light exists, or create it
+                if (!trafficLights[trafficId]) {
+                    createTrafficLight(trafficId);
+                }
+
+                // Update vehicle counts in the UI
+                document.getElementById(`cars${trafficId}`).innerText = cars;
+                document.getElementById(`trucks${trafficId}`).innerText = trucks;
+
+                console.log(`Traffic Light ${trafficId} Vehicle Counts: Cars = ${cars}, Trucks = ${trucks}`);
+            }
+
+            // Handle traffic/light/color messages (change the color of the traffic light)
+            if (topic === 'traffic/light/color') {
+                const { traffic_id, color } = data;
+
+                // Ensure the traffic light exists, or create it
+                if (!trafficLights[traffic_id]) {
+                    createTrafficLight(traffic_id);
+                }
+
+                // Update the light state based on the message
+                const trafficLight = trafficLights[traffic_id];
+                trafficLight.state = color; // Set the new color (red, yellow, or green)
+                
+                // Immediately update the display
+                updateTrafficLightDisplay(traffic_id);
+            }
+        });
+
+        // Function to update traffic light display and handle the timer
+        function updateTrafficLightDisplay(id) {
+            const trafficLight = trafficLights[id];
+            const lightElements = trafficLight.element.querySelectorAll('.light');
+            lightElements.forEach((light) => light.classList.remove('active'));
+
+            // Update the active light based on the state
+            if (trafficLight.state === 'green') {
+                lightElements[2].classList.add('active'); // Green light
+            } else if (trafficLight.state === 'yellow') {
+                lightElements[1].classList.add('active'); // Yellow light
+            } else if (trafficLight.state === 'red') {
+                lightElements[0].classList.add('active'); // Red light
+            }
+
+            // Decrease the time remaining and update the timer
+            trafficLight.currentTimer--;
+            document.getElementById(`timer${id}`).innerText = trafficLight.currentTimer;
+
+            // Decrement vehicle counts
+            const carsElement = document.getElementById(`cars${id}`);
+            const trucksElement = document.getElementById(`trucks${id}`);
+            let cars = parseInt(carsElement.innerText);
+            let trucks = parseInt(trucksElement.innerText);
+
+            if (trafficLight.state === 'green') {
+                const carsElement = document.getElementById(`cars${id}`);
+                const trucksElement = document.getElementById(`trucks${id}`);
+                let cars = parseInt(carsElement.innerText);
+                let trucks = parseInt(trucksElement.innerText);
+
+                if (cars > 0) {
+                    cars--;
+                    carsElement.innerText = cars;
+                } else if (trucks > 0) {
+                    trucks--;
+                    trucksElement.innerText = trucks;
+                }
+            }
+
+            // Handle transitions when the timer reaches 0
+            if (trafficLight.currentTimer <= 0) {
+                // If the light is currently green, move to yellow
+                if (trafficLight.state === 'green') {
+                    trafficLight.state = 'yellow';
+                    trafficLight.currentTimer = 1; // Yellow light lasts 1 second
+                }
+                // If the light is yellow, move to red
+                else if (trafficLight.state === 'yellow') {
+                    trafficLight.state = 'red';
+                    trafficLight.currentTimer = trafficLight.time; // Reset current timer to the original time
+                }
+                // If the light is red, move to the next light (cycle)
+                else if (trafficLight.state === 'red') {
+                    trafficLight.state = 'green';
+                    trafficLight.currentTimer = trafficLight.time; // Reset current timer to the original time
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+[
+    {
+        "traffic_id": 1,
+        "cars": 13,
+        "trucks": 0
+    },
+    {
+        "traffic_id": 2,
+        "cars": 6,
+        "trucks": 0
+    },
+    {
+        "traffic_id": 3,
+        "cars": 8,
+        "trucks": 2
+    },
+    {
+        "traffic_id": 4,
+        "cars": 9,
+        "trucks": 2
+    },
+    {
+        "traffic_id": 5,
+        "cars": 1,
+        "trucks": 1
+    }
+]
